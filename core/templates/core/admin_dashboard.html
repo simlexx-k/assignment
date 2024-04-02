@@ -1,0 +1,66 @@
+<div class="admin-dashboard">
+    <h1>System Overview</h1>
+    <div class="statistics">
+        <div class="total-users">
+            <h2>Total Users</h2>
+            <p id="total-users-count">Loading...</p>
+        </div>
+        <div class="total-assignments">
+            <h2>Total Assignments</h2>
+            <p id="total-assignments-count">Loading...</p>
+        </div>
+        <div class="total-submissions">
+            <h2>Total Submissions</h2>
+            <p id="total-submissions-count">Loading...</p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('authToken'); // Retrieve the token from local storage
+            fetch('/api/statistics/users', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Use the retrieved token
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('total-users-count').textContent = data.total;
+            })
+            .catch(error => {
+                console.error('Error fetching total users:', error);
+            });
+
+            fetch('/api/statistics/assignments', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Use the retrieved token
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('total-assignments-count').textContent = data.total;
+            })
+            .catch(error => {
+                console.error('Error fetching total assignments:', error);
+            });
+
+            fetch('/api/statistics/submissions', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Use the retrieved token
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('total-submissions-count').textContent = data.total;
+            })
+            .catch(error => {
+                console.error('Error fetching total submissions:', error);
+            });
+        });
+    </script>
+</div>

@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}  <!-- Assuming you have a base template. Adjust as necessary. -->
+{% block content %}
+<h2>Dashboard</h2>
+{% if user.is_teacher %}
+    <h3>Assignments Created</h3>
+    {% for assignment in assignments %}
+        <p>{{ assignment.title }}</p>
+    {% endfor %}
+    <h3>Submissions to Grade</h3>
+    {% for submission in submissions %}
+        <p>Submission for {{ submission.assignment.title }} by {{ submission.learner.email }}</p>
+    {% endfor %}
+{% elif user.is_superuser %}
+    <h3>System Overview</h3>
+    <p>Total Users: {{ users_count }}</p>
+    <p>Total Assignments: {{ assignments_count }}</p>
+    <p>Total Submissions: {{ submissions_count }}</p>
+{% else %}
+    <h3>Your Submissions</h3>
+    {% for submission in learner_submissions %}
+        <p>{{ submission.assignment.title }} - Grade: {{ submission.grade|default:"Not graded yet" }}</p>
+    {% endfor %}
+{% endif %}
+{% endblock %}
