@@ -23,7 +23,8 @@ class CustomAuthForm(forms.Form):
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
 
-        user = authenticate(email=email, password=password)
+        # Authenticate using username since Django's authenticate method expects username by default
+        user = authenticate(username=email, password=password)
         if not user:
             msg = "Invalid email or password."
             logger.error(f"Authentication failed for email: {email}. Error: {msg}")
@@ -41,7 +42,8 @@ class LearnerRegistrationForm(forms.ModelForm):
     def save(self, commit=True):
         user = super(LearnerRegistrationForm, self).save(commit=False)
         user.is_learner = True
-        user.username = self.cleaned_data.get('admission_number')  # Use the provided admission number as the username
+        # Use the provided admission number as the username
+        user.username = self.cleaned_data.get('admission_number')
         if commit:
             try:
                 user.save()
