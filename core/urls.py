@@ -1,7 +1,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import login_view, dashboard, logout_view, register_learner
-from .viewsets import AssignmentViewSet, SubmissionViewSet
+from .viewsets import AssignmentViewSet
+from .submission_viewset import SubmissionViewSet
 router = DefaultRouter()
 router.register(r'assignments', AssignmentViewSet)
 router.register(r'submissions', SubmissionViewSet)
