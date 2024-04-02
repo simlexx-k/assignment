@@ -28,6 +28,8 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 logger.info(f"User {email} logged in successfully.")
+                if user.is_superuser:
+                    return redirect('admin_dashboard')
                 return HttpResponseRedirect(reverse('dashboard'))
             else:
                 messages.error(request, "Invalid login details")
@@ -53,6 +55,7 @@ def dashboard(request):
             submissions_count = Submission.objects.count()
             context = {'users_count': users_count, 'assignments_count': assignments_count, 'submissions_count': submissions_count}
             logger.info("Admin dashboard loaded successfully.")
+            return render(request, 'core/admin_dashboard.html', context)
         else:
             learner_submissions = Submission.objects.filter(learner=request.user)
             context = {'learner_submissions': learner_submissions}
@@ -61,6 +64,24 @@ def dashboard(request):
     except Exception as e:
         logger.error("Error loading dashboard.", exc_info=True)
         messages.error(request, "An error occurred while trying to load the dashboard.")
+        return redirect('login')
+
+@login_required
+def admin_dashboard(request):
+    try:
+        if request.user.is_superuser:
+            users_count = User.objects.count()
+            assignments_count = Assignment.objects.count()
+            submissions_count = Submission.objects.count()
+            context = {'users_count': users_count, 'assignments_count': assignments_count, 'submissions_count': submissions_count}
+            logger.info("Admin dashboard loaded successfully.")
+            return render(request, 'core/admin_dashboard.html', context)
+        else:
+            logger.warning("Unauthorized access attempt to admin dashboard.")
+            return redirect('dashboard')
+    except Exception as e:
+        logger.error("Error loading admin dashboard.", exc_info=True)
+        messages.error(request, "An error occurred while trying to load the admin dashboard.")
         return redirect('login')
 
 def logout_view(request):
@@ -80,7 +101,7 @@ def register_learner(request):
             try:
                 user = form.save(commit=False)
                 user.username = form.cleaned_data.get('admission_number')  # Use admission number as username
-                user.set_unusable_password()  # As learners log in with admission numbers
+                user.set_password(form.cleaned_data.get('password1'))  # Hash password before saving
                 user.is_learner = True
                 user.save()
                 logger.info(f"Learner {user.username} registered successfully.")

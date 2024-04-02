@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
 import logging
 
@@ -23,8 +24,7 @@ class CustomAuthForm(forms.Form):
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
 
-        # Authenticate using username since Django's authenticate method expects username by default
-        user = authenticate(username=email, password=password)
+        user = authenticate(email=email, password=password)
         if not user:
             msg = "Invalid email or password."
             logger.error(f"Authentication failed for email: {email}. Error: {msg}")
@@ -32,18 +32,17 @@ class CustomAuthForm(forms.Form):
 
         return cleaned_data
 
-class LearnerRegistrationForm(forms.ModelForm):
+class LearnerRegistrationForm(UserCreationForm):
     admission_number = forms.CharField(required=True, help_text="Please enter your admission number.")
 
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name', 'admission_number']
+        fields = ['email', 'first_name', 'last_name', 'admission_number', 'password1', 'password2']
 
     def save(self, commit=True):
         user = super(LearnerRegistrationForm, self).save(commit=False)
         user.is_learner = True
-        # Use the provided admission number as the username
-        user.username = self.cleaned_data.get('admission_number')
+        user.username = self.cleaned_data.get('admission_number')  # Use the provided admission number as the username
         if commit:
             try:
                 user.save()
