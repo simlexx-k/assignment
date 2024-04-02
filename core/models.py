@@ -39,6 +39,16 @@ class CustomUserManager(BaseUserManager):
             logger.error(f"Error creating superuser with email: {email}. Error: {e}", exc_info=True)
             raise e
 
+    def create_learner(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_learner', True)
+        if not email:
+            raise ValueError('The Email field must be set for a learner')
+        try:
+            return self.create_user(email, password=password, **extra_fields)
+        except Exception as e:
+            logger.error(f"Error creating learner with email: {email}. Error: {e}", exc_info=True)
+            raise e
+
 class User(AbstractUser):
     email = models.EmailField(unique=True)  # Ensure the email field is unique
     is_teacher = models.BooleanField(default=False)  # Added field to identify if the user is a teacher
