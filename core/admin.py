@@ -1,24 +1,24 @@
 from django.contrib import admin
 from .models import User, Assignment, Submission
-import logging
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-logger = logging.getLogger(__name__)
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+    list_display = ('email', 'is_teacher', 'is_learner', 'admission_number', 'is_staff', 'is_active')
+    list_filter = ('is_teacher', 'is_learner', 'is_staff', 'is_active')
+    search_fields = ('email', 'admission_number')
+    ordering = ('email',)
 
-# Register your models here.
-try:
-    admin.site.register(User)
-    logger.info("User model registered successfully with the admin site.")
-except Exception as e:
-    logger.error(f"Error registering User model with the admin site: {e}", exc_info=True)
+@admin.register(Assignment)
+class AssignmentAdmin(admin.ModelAdmin):
+    list_display = ('title', 'deadline', 'created_at', 'updated_at')
+    list_filter = ('deadline',)
+    search_fields = ('title', 'description')
+    ordering = ('-deadline',)
 
-try:
-    admin.site.register(Assignment)
-    logger.info("Assignment model registered successfully with the admin site.")
-except Exception as e:
-    logger.error(f"Error registering Assignment model with the admin site: {e}", exc_info=True)
-
-try:
-    admin.site.register(Submission)
-    logger.info("Submission model registered successfully with the admin site.")
-except Exception as e:
-    logger.error(f"Error registering Submission model with the admin site: {e}", exc_info=True)
+@admin.register(Submission)
+class SubmissionAdmin(admin.ModelAdmin):
+    list_display = ('assignment', 'learner', 'submission_time', 'grade')
+    list_filter = ('assignment', 'learner', 'submission_time')
+    search_fields = ('assignment__title', 'learner__email', 'grade')
+    ordering = ('-submission_time',)

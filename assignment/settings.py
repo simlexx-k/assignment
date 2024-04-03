@@ -48,9 +48,12 @@ INSTALLED_APPS = [
     'core',  # Added the 'core' app to the installed apps
     'django_extensions',  # Added for Django Extensions
     'rest_framework',  # Added Django REST Framework
+    'channels',  # Added for Django Channels
+    'corsheaders',  # Added for handling CORS
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Added for CORS handling
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -79,7 +82,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'assignment.wsgi.application'
-
+ASGI_APPLICATION = 'assignment.asgi.application'  # Added for ASGI application to support Django Channels
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -132,3 +135,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom User Model
 AUTH_USER_MODEL = 'core.User'
+
+# Channels Layers Configuration
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    'localhost:3000',
+    'http://localhost/',
+    '127.0.0.1:3000',
+]

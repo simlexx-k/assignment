@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from .forms import CustomAuthForm, LearnerRegistrationForm
 from django.contrib import messages
@@ -15,6 +15,8 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import IsTeacherOrReadOnly
 from rest_framework.decorators import action
 from django.contrib.auth.decorators import login_required
+from reportlab.pdfgen import canvas
+from django.core.exceptions import PermissionDenied
 
 logger = logging.getLogger(__name__)
 
@@ -115,3 +117,23 @@ def register_learner(request):
     else:
         form = LearnerRegistrationForm()
     return render(request, 'core/register.html', {'form': form})
+
+@login_required
+def generate_assignment_report(request, assignment_id):
+    if not request.user.is_teacher:
+        raise PermissionDenied
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="assignment_report.pdf"'
+
+    p = canvas.Canvas(response)
+
+    submissions = Submission.objects.filter(assignment_id=assignment_id)
+    y_position = 800
+    for submission in submissions:
+        p.drawString(100, y_position, f"Learner: {submission.learner.email}, Grade: {submission.grade}, Feedback: {submission.feedback}")
+        y_position -= 20
+
+    p.showPage()
+    p.save()
+    return response
