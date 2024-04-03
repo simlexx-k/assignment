@@ -50,15 +50,17 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <h2>Your Assignments</h2>
-      <ul>
+    <div className="bg-backgroundLight min-h-screen text-textColor">
+      <h1 className="text-3xl font-bold p-5">Dashboard</h1>
+      <h2 className="text-2xl font-semibold p-5">Your Assignments</h2>
+      <ul className="list-disc pl-10">
         {assignments.map((assignment) => (
-          <li key={assignment.id}>{assignment.title}</li>
+          <li key={assignment.id} className="mb-2">{assignment.title}</li>
         ))}
       </ul>
-      <Link href="/">Back to Home</Link>
+      <Link href="/" className="p-5">
+        <a className="bg-primary text-white py-2 px-4 rounded hover:bg-secondary">Back to Home</a>
+      </Link>
     </div>
   );
 }

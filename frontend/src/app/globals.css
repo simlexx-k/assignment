@@ -3,27 +3,35 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-light: #d8e1e6;
+  --text-color: #000000;
+  --border-color: #d3d7dd;
+  --primary: #3a2d97;
+  --secondary: #adadc2;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-light: #1e293b;
+    --text-color: #f1f5f9;
+    --border-color: #334155;
+    --primary: #818cf8;
+    --secondary: #a5b4fc;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: var(--background-light);
+  color: var(--text-color);
+}
+
+a {
+  color: var(--primary);
+  @apply hover:text-secondary;
+}
+
+input, button {
+  border-color: var(--border-color);
 }
 
 @layer utilities {

@@ -19,17 +19,17 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Login</h1>
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
+    <form onSubmit={handleSubmit} className="bg-backgroundLight min-h-screen flex flex-col items-center justify-center">
+      <h1 className="text-3xl font-bold mb-4 text-textColor">Login</h1>
+      <div className="mb-4">
+        <label htmlFor="email" className="text-textColor">Email:</label>
+        <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required className="border-borderColor rounded px-2 py-1" />
       </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
+      <div className="mb-4">
+        <label htmlFor="password" className="text-textColor">Password:</label>
+        <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required className="border-borderColor rounded px-2 py-1" />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit" className="bg-primary text-white py-2 px-4 rounded hover:bg-secondary">Login</button>
     </form>
   );
 }
