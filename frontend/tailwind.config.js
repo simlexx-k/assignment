@@ -1,4 +1,5 @@
 module.exports = {
+  darkMode: 'class', // Enable dark mode using the 'class' strategy
   theme: {
     extend: {
       colors: {
@@ -8,8 +9,16 @@ module.exports = {
         primary: '#3a2d97',
         secondary: '#adadc2',
         textColor: '#000000',
+        // Corrected dark theme colors
+        dark: {
+          background: '#1e293b',
+          text: '#f1f5f9',
+          border: '#334155',
+          primary: '#818cf8',
+          secondary: '#a5b4fc',
+        },
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')], // Add the forms plugin
 };

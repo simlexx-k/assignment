@@ -1,8 +1,7 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
 
-const cors = require("cors");
-self.use(cors());
 
 const Home = () => {
   return (

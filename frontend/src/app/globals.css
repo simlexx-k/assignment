@@ -39,3 +39,25 @@ input, button {
     text-wrap: balance;
   }
 }
+
+/* Dark mode styles */
+.dark {
+  --background-light: #1e293b;
+  --text-color: #f1f5f9;
+  --border-color: #334155;
+  --primary: #818cf8;
+  --secondary: #a5b4fc;
+}
+
+body.dark {
+  background-color: var(--background-light);
+  color: var(--text-color);
+}
+
+.dark a {
+  color: var(--primary);
+}
+
+.dark input, .dark button {
+  border-color: var(--border-color);
+}
